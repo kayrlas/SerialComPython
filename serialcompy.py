@@ -20,10 +20,10 @@ class SerialCom(object):
         `writemode (bool)`: Serial write accept
 
     Example:
-    ```python
-    if __name__ == "__main__":
-        com = SerialCom()
-        com.start_serialcom(9600, 0.1 , true)
+        ```python
+        if __name__ == "__main__":
+            com = SerialCom()
+            com.start_serialcom(9600, 0.1 , true)
     ```
     """
 
@@ -35,7 +35,7 @@ class SerialCom(object):
 
 
     def find_comports(self) -> list:
-        """Find comports
+        """Find comports and save to `self.devices`
 
         Returns:
             `list`: List of comports
@@ -47,7 +47,7 @@ class SerialCom(object):
 
 
     def select_comport(self, *, devices=[]) -> bool:
-        """Select comports from list
+        """Select a comport from list
 
         Args (option):
             `devices`: List of comports
@@ -88,7 +88,7 @@ class SerialCom(object):
 
 
     def register_comport(self, *, device=None) -> bool:
-        """Save the comport to `self.serial.port`
+        """Save a comport to `self.serial.port`
 
         Args (option):
             `device`: Comport name
@@ -112,6 +112,9 @@ class SerialCom(object):
 
     def open_comport(self, *, device=None) -> bool:
         """Open the comport
+
+        Args (option):
+            `device`: Comport name
 
         Returns:
             `bool`: Open comport successfully
@@ -275,14 +278,29 @@ class SerialCom(object):
 
 
     def get_found_devices(self) -> list:
+        """Return `self.devices`
+
+        Returns:
+            `list`: comports list
+        """
         return self.devices
 
 
     def get_selected_device(self):
+        """Return `self.device`
+
+        Returns:
+            `list_ports.comports().device`: selected comport
+        """
         return self.device
 
 
     def get_write_available(self) -> bool:
+        """Return `self.writemode`
+
+        Returns:
+            `bool`: serial write accept
+        """
         return self.writemode
 
 
