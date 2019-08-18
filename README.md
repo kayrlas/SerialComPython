@@ -49,10 +49,10 @@ SerialCom (class)              // Args: baudrate, timeout, writemode
 3. After input a baudrate, push "Open" button. If the "Baudrate" entry is empty, the rate is 9600 bps by default or the last bps you open the port.  
 ![Window Open](/img/03-open.png "03-open")
 
-4. Input string to "Text" entry and push "Send" button. "TX" listbox is a sending history and "RX" listbox is a receiving history. Pushing "TX Export" button or "RX Export", you can save these history as a text file.  
+4. Input string to "Text" entry and push "Send" button. "TX" listbox is a sending history and "RX" listbox is a receiving history. Pushing "TX Export" button or "RX Export", you can save these histories as a text file.  
 ![Window Send](/img/04-send.png "04-send")  
 
-5. To disconnect, push "Close" button.
+5. To disconnect, push "Close" button.  
 ![Window Close](/img/05-close.png "05-close")  
 
 ## main_cui (Python Code)
