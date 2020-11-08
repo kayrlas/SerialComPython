@@ -1,4 +1,4 @@
-#! /usr/bin/env python3.7
+#! /usr/bin/env python3.8
 # -*- coding: utf-8 -*-
 # Created by kayrlas on August 10, 2019 (https://github.com/kayrlas)
 # serialcompy.py
@@ -33,7 +33,6 @@ class SerialCom(object):
         self.serial = Serial(baudrate=baudrate, timeout=timeout)
         self.writemode = writemode
 
-
     def find_comports(self) -> list:
         """Find comports and save to `self.devices`
 
@@ -45,7 +44,6 @@ class SerialCom(object):
         self.devices = _devices
         return _devices
 
-
     def select_comport(self, *, devices=[]) -> bool:
         """Select a comport from list
 
@@ -56,7 +54,7 @@ class SerialCom(object):
             `bool`: Saving `self.device` successfully
         """
         if devices == []:
-            _devices = self.devices
+            _devices = self.devices.copy()
             _num_devices = len(self.devices)
         else:
             _devices = devices
@@ -86,29 +84,29 @@ class SerialCom(object):
                 print("%s is out of the number!" % _inp_num)
                 return False
 
-
-    def register_comport(self, *, device=None) -> bool:
+    def register_comport(self, *, device=None, deviceno=None) -> bool:
         """Save a comport to `self.serial.port`
 
         Args (option):
             `device`: Comport name
+            `deviceno`: Number in list of comports
 
         Returns:
             `bool`: Registered comport successfully
         """
-        if device is None:
+        if device is None and deviceno is None:
             _device = self.device
+        elif deviceno is not None:
+            _device = self.devices[deviceno].device
         else:
             _device = device
 
-        # Check device specified or not
         if _device is None:
             print("Device has not been specified yet!")
             return False
         else:
             self.serial.port = _device
             return True
-
 
     def open_comport(self, *, device=None) -> bool:
         """Open the comport
@@ -133,7 +131,8 @@ class SerialCom(object):
             try:
                 self.serial.open()
             except SerialException:
-                print("%s was disconnected while you input [Yes/No]" % self.serial.port)
+                print(
+                    "%s was disconnected while you input [Yes/No]" % self.serial.port)
                 return False
             else:
                 return True
@@ -143,7 +142,6 @@ class SerialCom(object):
         else:                          # Other than [Yes/No]
             print("Oops, you didn't enter [Yes/No]. Please try again.")
             return False
-
 
     def close_comport(self) -> bool:
         """Close the comport
@@ -160,7 +158,6 @@ class SerialCom(object):
         else:
             print("Closing...")
             return True
-
 
     def serial_write(self):
         """Write strings to comport
@@ -179,11 +176,11 @@ class SerialCom(object):
                 print("Sending texts canceled.")
                 self.close_comport()
             except SerialException:
-                print("%s was disconnected while writing texts" % self.serial.port)
+                print("%s was disconnected while writing texts" %
+                      self.serial.port)
                 self.close_comport()
             else:
                 time.sleep(1)
-
 
     def start_serialwrite(self):
         """Start `serial_write` in another thread
@@ -193,7 +190,6 @@ class SerialCom(object):
         """
         self.th_swrite = Thread(target=self.serial_write)
         self.th_swrite.start()
-
 
     def serial_read(self):
         """Read strings from comport
@@ -207,14 +203,14 @@ class SerialCom(object):
             try:
                 _recv_data = self.serial.readline()
             except SerialException:
-                print("%s was disconnected while reading comport" % self.serial.port)
+                print("%s was disconnected while reading comport" %
+                      self.serial.port)
                 self.close_comport()
             else:
                 if _recv_data != b'':
                     _t1 = time.strftime(_format, time.localtime())
                     print(_t1 + " (RX) : " + _recv_data.strip().decode("utf-8"))
                     time.sleep(1)
-
 
     def start_serialcom(self) -> bool:
         """Start serial communication
@@ -244,7 +240,6 @@ class SerialCom(object):
 
         print("Comport has been closed. See you.")
         return True
-
 
     def start_serialcom_option(self) -> bool:
         """Start serial communication (using option args)
@@ -276,7 +271,6 @@ class SerialCom(object):
         print("Comport has been closed. See you.")
         return True
 
-
     def get_found_devices(self) -> list:
         """Return `self.devices`
 
@@ -285,7 +279,6 @@ class SerialCom(object):
         """
         return self.devices
 
-
     def get_selected_device(self):
         """Return `self.device`
 
@@ -293,7 +286,6 @@ class SerialCom(object):
             `list_ports.comports().device`: selected comport
         """
         return self.device
-
 
     def get_write_available(self) -> bool:
         """Return `self.writemode`
